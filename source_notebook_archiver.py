@@ -52,12 +52,13 @@ def main():
     docdir = os.path.relpath("./docs")
     for root, dirs, files in os.walk(source_dir):
         dirs.sort(key=lambda word: [alphabet.index(c) for c in word])
+        
         for file in files:
             rel_dir = os.path.relpath(root, source_dir)
-            if file.endswith(".ipynb") and not "checkpoint" in file :
+            if file.endswith(".ipynb") and not "checkpoint" in file and not "devel" in rel_dir :
                 # print(rel_dir,file)
                 dst = os.path.join(docdir,rel_dir)
-                convertcmdpre = "jupyter nbconvert "+"--execute --to html --template templates/source_nb.tpl --output-dir "+dst+" "+os.path.join(rel_dir.replace(" ","\ "),file.replace(" ","\ "))
+                convertcmdpre = "jupyter nbconvert "+"--execute --allow-errors --to html --template templates/source_nb.tpl --output-dir "+dst+" "+os.path.join(rel_dir.replace(" ","\ "),file.replace(" ","\ "))
                 #convertcmdpre = "jupyter nbconvert  "+dst+"/*.ipynb"+" --to webpdf --output-dir "+dst
 
                 #print (convertcmdpre)
