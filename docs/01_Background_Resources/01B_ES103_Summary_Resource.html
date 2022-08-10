@@ -13102,7 +13102,7 @@ div#notebook {
 
 <script>
 $( document ).ready(function(){
-            var cfg = {"base_numbering": 1, "nav_menu": {}, "number_sections": true, "sideBar": true, "skip_h1_title": false, "title_cell": "Table of Contents", "title_sidebar": "Contents", "toc_cell": true, "toc_position": {}, "toc_section_display": true, "toc_window_display": false};
+            var cfg = {"base_numbering": 1, "nav_menu": {}, "number_sections": true, "sideBar": true, "skip_h1_title": false, "title_cell": "Table of Contents", "title_sidebar": "Contents", "toc_cell": true, "toc_position": {}, "toc_section_display": true, "toc_window_display": true};
             cfg.navigate_menu=false;
             // fire the main function with these parameters
             require(['nbextensions/toc2/toc2'], function (toc2) {
@@ -13557,14 +13557,6 @@ $$\frac{d\vec{x}}{dt} = f(\vec{x},u)$$<p>Which saves a bit of writing if we just
 <p>For question 1, we ask "Is my model a differential equation, and should it be?" Recall that it "should be" if the system stores energy. The same reasoning applies for higher-order input-output differential equation models. You can further confirm that the number of derivatives in your model is equal to the number of <em>independent</em> energy storing elements in your scope.</p>
 <p>For question 2, things get a little more complicated for systems where $n&gt;1$. For systems with $n=2$, we can still check whether the model reaches a steady state by ensuring that all terms multiplied by our dependent variable $y$ on the right-hand side are $&lt;0$, which tells us that the system's energy will <em>decrease</em> more rapidly as the dependent variable (and its first derivative) increase. <strong>HOWEVER</strong>, the situation is much more complicated for systems where $n&gt;2$, and we do not have (and will not learn) the tools for checking the <em>stability</em> of systems with order greater than 2 in this course. You will learn these tools in your differential equations course.</p>
 <p>For question 3, our process is to perform dimensional analysis on each term in your differential equation to confirm that both sides of the equals sign have the same units, and that terms that are added or subtracted have consistent units as well.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Internal-Validity-for-State-Space-Differential-Equation-Models">Internal Validity for State Space Differential Equation Models<a class="anchor-link" href="#Internal-Validity-for-State-Space-Differential-Equation-Models">&#182;</a></h2><p>We will use the same steps here as we used <a href="#Internal-Validity-of-Input-Output-Differential-Equation-Models">above</a> for input-output models. However, determining whether our system will reach a steady state is possibly even more difficult for a state space model of higher order. This is because of the coupling between the equations. Steps 2 and 3 are thus much more difficult, and you are not expected to be able to perform this step for higher-order models in ES103.</p>
 
 </div>
 </div>
