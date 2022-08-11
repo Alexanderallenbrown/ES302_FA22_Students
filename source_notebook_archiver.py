@@ -25,6 +25,11 @@ opener = """
 <p style="text-align: center"> Last Updated:    """+str(date_time)+"""</p>
 <div style="border: solid 2px black; border-radius: 10px; text-align: center; width: 50vw;margin-left: auto; margin-right: auto">
 <br><br>
+
+<h2 style="text-align: center"><a href="https://docs.google.com/document/d/e/2PACX-1vQ1H69mvMPlcnMA6GidWrSUizz1wcDvLIucq9pgphmGR-bwh7KdzLqpWCVMSzeOopYRn0L8ytRGmKRk/pub">Course Syllabus FA22</a></h2>
+<h2 style="text-align: center"> TextBook</h2>
+<h3><a href="https://nbviewer.org/github/Introduction-to-Autonomous-Robots/Introduction-to-Autonomous-Robots/blob/master/book-12-01-21-full.pdf">Introduction to Autonomous Robots</a></h3>
+<p>By: Correll, Nikolaus and Hayes, Bradley, and Heckman, Christoffer, and Roncone, Alessandro</p>
 """
 
 closer = """
@@ -48,6 +53,10 @@ def set_permissions(path, uid, gid):
 
 
 def main():
+    last_rel_dir = ''
+    section = 'Resources'
+    last_section = 'Resources'
+    findex.write("<h2><u>Supplemental Resources</u></h2>\r\n")
     source_dir = os.path.abspath(".")
     docdir = os.path.relpath("./docs")
     for root, dirs, files in os.walk(source_dir):
@@ -55,6 +64,12 @@ def main():
         
         for file in files:
             rel_dir = os.path.relpath(root, source_dir)
+            if((rel_dir != last_rel_dir) and '.' not in rel_dir and 'devel' not in rel_dir and 'templates' not in rel_dir and 'docs' not in rel_dir):
+                if('A'==file[0] and last_section=='Resources'):
+                    last_section = 'Assignments'
+                    findex.write("<h2><u>Assignments</u></h2>\r\n")
+                findex.write("<h3 style='text-align: center'>"+str(rel_dir)+"</h3>\r\n")
+                last_rel_dir = rel_dir
             if file.endswith(".ipynb") and not "checkpoint" in file and not "devel" in rel_dir :
                 # print(rel_dir,file)
                 dst = os.path.join(docdir,rel_dir)
