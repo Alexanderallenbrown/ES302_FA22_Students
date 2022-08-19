@@ -73,7 +73,7 @@ def main():
             if file.endswith(".ipynb") and not "checkpoint" in file and not "devel" in rel_dir :
                 # print(rel_dir,file)
                 dst = os.path.join(docdir,rel_dir)
-                convertcmdpre = "jupyter nbconvert "+"--execute --allow-errors --to html --template templates/source_nb.tpl --output-dir "+dst+" "+os.path.join(rel_dir.replace(" ","\ "),file.replace(" ","\ "))
+                convertcmdpre = "jupyter nbconvert "+"--execute --allow-errors --to html_toc --template templates/source_nb.tpl --output-dir "+dst+" "+os.path.join(rel_dir.replace(" ","\ "),file.replace(" ","\ "))
                 #convertcmdpre = "jupyter nbconvert  "+dst+"/*.ipynb"+" --to webpdf --output-dir "+dst
 
                 #print (convertcmdpre)
