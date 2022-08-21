@@ -13623,30 +13623,33 @@ $$\frac{d\vec{x}}{dt} = f(\vec{x},u)$$<p>Which saves a bit of writing if we just
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-octave"><pre><span></span><span class="n">T</span> <span class="p">=</span> <span class="mf">0.01</span><span class="p">;</span> <span class="c">%timestep</span>
-<span class="n">t</span> <span class="p">=</span> <span class="mi">0</span><span class="p">:</span><span class="n">T</span><span class="p">:</span><span class="mi">1</span><span class="p">;</span> <span class="c">%time vector</span>
-<span class="n">y</span> <span class="p">=</span> <span class="nb">cos</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">t</span><span class="p">);</span> <span class="c">%function we wish to integrate. This may come from data rather than a known function of t.</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">Y_estimate</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">t</span><span class="p">));</span> <span class="c">%initialize an array to hold our estimates for Y, the integral of y.</span>
-<span class="n">Y0</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c">%some initial, known value for the integral at the beginning.</span>
-<span class="n">Y_estimate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">Y0</span><span class="p">;</span> <span class="c">%place this value in the first entry of our array</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span> <span class="c1">#timestep</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="p">)</span> <span class="c1">#time vector</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">t</span><span class="p">);</span> <span class="c1">#function we wish to integrate. This may come from data rather than a known function of t.</span>
 
-<span class="n">Y_true</span> <span class="p">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">t</span><span class="p">);</span> <span class="c">%for this example, we know that d/dt(sin(t)) = cos(t). </span>
-<span class="c">%We will use this &quot;exact&quot; solution to the integral to allow us to see how accurate Euler integration is.</span>
+<span class="n">Y_estimate</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">t</span><span class="p">));</span> <span class="c1">#initialize an array to hold our estimates for Y, the integral of y.</span>
+<span class="n">Y0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">#some initial, known value for the integral at the beginning.</span>
+<span class="n">Y_estimate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y0</span><span class="p">;</span> <span class="c1">#place this value in the first entry of our array</span>
 
-<span class="c">%now set up a for-loop starting at the second entry in Y_estimate, since we already know Y_estimate(1)=Y0</span>
-<span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="c">%automatically set up the for-loop to be the right length</span>
-    <span class="c">%now implement Euler&#39;s formula. remember that here, y is dY/dt.</span>
-    <span class="n">Y_estimate</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">Y_estimate</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
-<span class="k">end</span>
+<span class="n">Y_true</span> <span class="o">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">t</span><span class="p">);</span> <span class="c1">#for this example, we know that d/dt(sin(t)) = cos(t). </span>
+<span class="c1">#We will use this &quot;exact&quot; solution to the integral to allow us to see how accurate Euler integration is.</span>
 
-<span class="c">%now we will compare our approximate integral with our &quot;true&quot; value to see if Euler integration works.</span>
+<span class="c1">#now set up a for-loop starting at the second entry in Y_estimate, since we already know Y_estimate(1)=Y0</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span> <span class="c1">#automatically set up the for-loop to be the right length</span>
+    <span class="c1">#now implement Euler&#39;s formula. remember that here, y is dY/dt.</span>
+    <span class="n">Y_estimate</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y_estimate</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-<span class="nb">figure</span>
-<span class="nb">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">Y_true</span><span class="p">,</span><span class="s">&#39;k.&#39;</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">Y_estimate</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
-<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Y(t)&#39;</span><span class="p">)</span>
-<span class="nb">legend</span><span class="p">(</span><span class="s">&#39;true&#39;</span><span class="p">,</span><span class="s">&#39;Forward Euler Integration&#39;</span><span class="p">)</span>
+
+<span class="c1">#now we will compare our approximate integral with our &quot;true&quot; value to see if Euler integration works.</span>
+
+<span class="n">figure</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">Y_true</span><span class="p">,</span><span class="s1">&#39;k.&#39;</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">Y_estimate</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y(t)&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">([</span><span class="s1">&#39;true&#39;</span><span class="p">,</span><span class="s1">&#39;Forward Euler Integration&#39;</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -13659,13 +13662,26 @@ $$\frac{d\vec{x}}{dt} = f(\vec{x},u)$$<p>Which saves a bit of writing if we just
 
 <div class="output_area">
 
+    <div class="prompt output_prompt">Out[1]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.legend.Legend at 0x7fa262630898&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
     <div class="prompt"></div>
 
 
 
 
 <div class="output_png output_subarea ">
-<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_46_0.png"
+<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_46_1.png"
 >
 </div>
 
@@ -13704,26 +13720,26 @@ Is represented in the diagram, with the result of the addition of $-4y$ and $2$,
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-octave"><pre><span></span><span class="n">clear</span> <span class="nb">all</span>
-<span class="c">%create a time vector</span>
-<span class="n">t</span> <span class="p">=</span> <span class="mi">0</span><span class="p">:.</span><span class="mi">001</span><span class="p">:</span><span class="mi">1</span><span class="p">;</span>
-<span class="c">%create a vector of zeros to hold our y estimates</span>
-<span class="n">y</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
-<span class="c">%declare the first element in &quot;y&quot; as our best guess for the FIRST value of y (could be from a dataset, or knowledge of an experiment)</span>
-<span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="mf">0.2</span><span class="p">;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1">#create a time vector</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">.001</span><span class="p">);</span>
+<span class="c1">#create a vector of zeros to hold our y estimates</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="c1">#declare the first element in &quot;y&quot; as our best guess for the FIRST value of y (could be from a dataset, or knowledge of an experiment)</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
 
-<span class="c">%loop through time values to perform integration. start at the second value of time, since we already have a guess for y at the first value!</span>
-<span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="c">%first use the differential equation to compute dy/dt (slope) based on our best guess for y at the previous time</span>
-    <span class="n">dydt</span> <span class="p">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="c">%2 is a constant, but it doesn&#39;t have to be. I could have a vector of known values for 2 as well.</span>
-    <span class="c">%now extrapolate (integrate) to our current time to get a new estimate for y!</span>
-    <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">dydt</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="k">end</span>
+<span class="c1">#loop through time values to perform integration. start at the second value of time, since we already have a guess for y at the first value!</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+    <span class="c1">#first use the differential equation to compute dy/dt (slope) based on our best guess for y at the previous time</span>
+    <span class="n">dydt</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">#2 is a constant, but it doesn&#39;t have to be. I could have a vector of known values for 2 as well.</span>
+    <span class="c1">#now extrapolate (integrate) to our current time to get a new estimate for y!</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dydt</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
 
-<span class="nb">figure</span>
-<span class="nb">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
-<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
-<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">figure</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13736,13 +13752,26 @@ Is represented in the diagram, with the result of the addition of $-4y$ and $2$,
 
 <div class="output_area">
 
+    <div class="prompt output_prompt">Out[2]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Text(0, 0.5, &#39;y&#39;)</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
     <div class="prompt"></div>
 
 
 
 
 <div class="output_png output_subarea ">
-<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_49_0.png"
+<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_49_1.png"
 >
 </div>
 
@@ -13766,40 +13795,43 @@ $$\dot{v} = - \frac{1}{\left( J_w + m_w r^2 + \frac{m_c r^2}{2} \right)}b v$$<p>
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-octave"><pre><span></span><span class="c">% clear variables</span>
-<span class="n">clear</span> <span class="nb">all</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="c">%load the data we will use for model validation</span>
-<span class="n">data</span> <span class="p">=</span> <span class="nb">load</span><span class="p">(</span><span class="s">&#39;reading6data.txt&#39;</span><span class="p">);</span>
-<span class="n">td</span> <span class="p">=</span> <span class="n">data</span><span class="p">(:,</span><span class="mi">1</span><span class="p">);</span>
-<span class="n">vd</span> <span class="p">=</span> <span class="n">data</span><span class="p">(:,</span><span class="mi">2</span><span class="p">);</span>
+<span class="c1">#load the data we will use for model validation</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;reading6data.txt&#39;</span><span class="p">);</span>
+<span class="n">td</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">vd</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">];</span>
+<span class="c1">#set up a new time and velocity vector to use for simulation</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">.01</span><span class="p">;</span>
+<span class="n">simtime</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">tsim</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">simtime</span><span class="p">,</span><span class="n">dt</span><span class="p">);</span>
+<span class="c1">#initialize values for simulation</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">vd</span><span class="p">))</span>
+<span class="n">vsim</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">tsim</span><span class="p">))</span>
+<span class="c1">#set the initial variable</span>
+<span class="n">vsim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vd</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
-<span class="c">%set up a new time and velocity vector to use for simulation</span>
-<span class="n">dt</span> <span class="p">=</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span>
-<span class="n">simtime</span> <span class="p">=</span> <span class="n">td</span><span class="p">(</span><span class="k">end</span><span class="p">);</span>
-<span class="n">tsim</span> <span class="p">=</span> <span class="mi">0</span><span class="p">:</span><span class="n">dt</span><span class="p">:</span><span class="n">simtime</span><span class="p">;</span>
-<span class="n">vsim</span> <span class="p">=</span> <span class="n">vd</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="c1">#define the measured parameters for the toy truck parts</span>
+<span class="n">mc</span> <span class="o">=</span> <span class="mf">.05</span><span class="p">;</span> <span class="c1">#kg, truck mass</span>
+<span class="n">mw</span> <span class="o">=</span> <span class="mf">.01</span><span class="p">;</span> <span class="c1">#kg, mass of one axle, including 2 wheels</span>
+<span class="n">rw</span> <span class="o">=</span> <span class="mf">.005</span><span class="p">;</span> <span class="c1">#m, radius of wheels</span>
+<span class="n">Jw</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">mw</span><span class="o">*</span><span class="n">rw</span><span class="o">**</span><span class="mi">2</span><span class="p">;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">1.5e-6</span><span class="p">;</span>
 
-<span class="c">%define the measured parameters for the toy truck parts</span>
-<span class="n">mc</span> <span class="p">=</span> <span class="p">.</span><span class="mi">05</span><span class="p">;</span> <span class="c">%kg, truck mass</span>
-<span class="n">mw</span> <span class="p">=</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span> <span class="c">%kg, mass of one axle, including 2 wheels</span>
-<span class="n">rw</span> <span class="p">=</span> <span class="p">.</span><span class="mi">005</span><span class="p">;</span> <span class="c">%m, radius of wheels</span>
-<span class="n">Jw</span> <span class="p">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">mw</span><span class="o">*</span><span class="n">rw</span>^<span class="mi">2</span><span class="p">;</span>
-<span class="n">b</span> <span class="p">=</span> <span class="mf">1.5e-6</span><span class="p">;</span>
+<span class="c1">#use Euler integration to simulate our model</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">tsim</span><span class="p">)):</span>
+    <span class="c1">#compute acceleration using model</span>
+    <span class="n">vdot</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Jw</span><span class="o">+</span><span class="n">rw</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">mw</span><span class="o">+</span><span class="n">mc</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">vsim</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">vsim</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">vsim</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">vdot</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
 
-<span class="c">%use Euler integration to simulate our model</span>
-<span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">tsim</span><span class="p">)</span>
-    <span class="c">%compute acceleration using model</span>
-    <span class="n">vdot</span> <span class="p">=</span> <span class="o">-</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Jw</span><span class="o">+</span><span class="n">rw</span>^<span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">mw</span><span class="o">+</span><span class="n">mc</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">vsim</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">vsim</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">vsim</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">vdot</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
-<span class="k">end</span>
 
-<span class="c">%compare model with data to evaluate</span>
-<span class="nb">figure</span>
-<span class="nb">plot</span><span class="p">(</span><span class="n">td</span><span class="p">,</span><span class="n">vd</span><span class="p">,</span><span class="s">&#39;ks&#39;</span><span class="p">,</span><span class="n">tsim</span><span class="p">,</span><span class="n">vsim</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
-<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;velocity (m/s)&#39;</span><span class="p">)</span>
-<span class="nb">legend</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span><span class="s">&#39;simulation&#39;</span><span class="p">)</span>
+<span class="c1">#compare model with data to evaluate</span>
+<span class="n">figure</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">td</span><span class="p">,</span><span class="n">vd</span><span class="p">,</span><span class="s1">&#39;ks&#39;</span><span class="p">,</span><span class="n">tsim</span><span class="p">,</span><span class="n">vsim</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;velocity (m/s)&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">([</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;simulation&#39;</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -13815,10 +13847,34 @@ $$\dot{v} = - \frac{1}{\left( J_w + m_w r^2 + \frac{m_c r^2}{2} \right)}b v$$<p>
     <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>30
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.legend.Legend at 0x7fa262517470&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
 
 
 <div class="output_png output_subarea ">
-<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_51_0.png"
+<img src="01B_ES103_Summary_Resource_files/01B_ES103_Summary_Resource_51_2.png"
 >
 </div>
 
@@ -13851,14 +13907,13 @@ $$\ddot{y} = f(\dot{y},y,u)$$<p>where $u$ is our system's input (source of power
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The difficulty with this approach is that $\ddot{y}$ <em>depends on our last estimate of $\dot{y}$, $\dot{y}(k-1)$ as well as our last estimate of $y$, $y(k-1)$ and our last input $u(k-1)$.</em> This means that the two integration operations have to occur in the <em>same</em> loop. The structure of such a loop can be summarized as follows, where  <code>yd</code> represents $\dot{y}$ and <code>ydd</code> represents $\ddot{y}$:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="c">% compute second derivative of output based on model equation, represented here by &quot;f.&quot;</span>
-    <span class="n">ydd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">yd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">u</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
-    <span class="c">% now extrapolate once to get our new estimate of the first derivative of y</span>
-    <span class="n">yd</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">yd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ydd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="c">% now extrapolate a second time to get our new estimate of y itself.</span>
-    <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">y</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">yd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="k">end</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="c1"># compute second derivative of output based on model equation, represented here by &quot;f.&quot;</span>
+    <span class="n">ydd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">yd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="c1"># now extrapolate once to get our new estimate of the first derivative of y</span>
+    <span class="n">yd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">yd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">ydd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="c1"># now extrapolate a second time to get our new estimate of y itself.</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">yd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
 </pre></div>
 <p>Notice that we are are not using the <em>new</em> estimate of $\dot{y}$ in the second integration! See the figure above to see why-- we are calculating the slope of each function one timestep behind where we would like to predict <em>to</em>.</p>
 <p>Also note that for this approach to work, an initial condition for $y$ is needed along with an initial condition for $\dot{y}$ so that the values <code>y(1)</code> and <code>yd(1)</code> are known, and can be used as the starting point for extrapolation on the first iteration of the loop.</p>
@@ -13870,18 +13925,17 @@ $$\ddot{y} = f(\dot{y},y,u)$$<p>where $u$ is our system's input (source of power
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Simulating-Higher-Order-Differential-Equation-Models-In-State-Space-Form-Using-Euler-Integration">Simulating Higher-Order Differential Equation Models In State Space Form Using Euler Integration<a class="anchor-link" href="#Simulating-Higher-Order-Differential-Equation-Models-In-State-Space-Form-Using-Euler-Integration">&#182;</a></h2><p>As we did above for input-output systems, we will need to extrapolate more than one time in each "loop" of our Euler integration code. This is because we will need to compute one derivative for each state variable at each timestep, and update all of the state variables before moving on, <strong>because of the coupling between the list of first-order differential equations</strong> in our model. This is fairly simple, and can be done very easily for systems of <em>very</em> high order (for an input-output model, this would be much harder). Code that implements this can be put in a for-loop as follows:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="c">% compute the derivative of each state based on model equations.</span>
-    <span class="n">x1d</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">x2</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),...,</span><span class="n">xn</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">u</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
-    <span class="n">x1d</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">x2</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),...,</span><span class="n">xn</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">u</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
-    <span class="p">...</span> <span class="c">%could be many of these... then the last one xn:</span>
-    <span class="n">xnd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">x2</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),...,</span><span class="n">xn</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">u</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
-    <span class="c">% now extrapolate once for each state to get our new estimates.</span>
-    <span class="n">x1</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">x1</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">x1d</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">x2</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">x2</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">x2d</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">...</span> <span class="c">%repeat for as many states as you have</span>
-    <span class="n">xn</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">xn</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">-</span><span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">xnd</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="k">end</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+    <span class="c1"># compute the derivative of each state based on model equations.</span>
+    <span class="n">x1d</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">x2</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">...</span><span class="p">,</span><span class="n">xn</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">x1d</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">x2</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">...</span><span class="p">,</span><span class="n">xn</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="o">...</span> <span class="c1">#could be many of these... then the last one xn:</span>
+    <span class="n">xnd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x1</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">x2</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">...</span><span class="p">,</span><span class="n">xn</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="c1"># now extrapolate once for each state to get our new estimates.</span>
+    <span class="n">x1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">x1</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">x1d</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">x2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">x2d</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="o">...</span> <span class="c1">#repeat for as many states as you have</span>
+    <span class="n">xn</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">xn</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">xnd</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
 </pre></div>
 
 </div>
@@ -13892,7 +13946,7 @@ $$\ddot{y} = f(\dot{y},y,u)$$<p>where $u$ is our system's input (source of power
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-octave"><pre><span></span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
